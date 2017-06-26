@@ -6,7 +6,7 @@ That said, it only supports one level of recursion at the moment, because that's
 # Installation
 
 ```
-go get github.com/AlexsJones/cli
+go get github.com/AlexsJones/cli/cli
 ```
 
 # Example
