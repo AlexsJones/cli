@@ -1,5 +1,7 @@
 # cli
 
+[![Build Status](https://travis-ci.org/AlexsJones/cli.svg?branch=master)](https://travis-ci.org/AlexsJones/cli)
+
 This is a simple interactive prompt for go that actually supports sub-commands, because I couldn't find one that did...
 That said, it only supports one level of recursion at the moment, because that's all I need.
 
