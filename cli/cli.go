@@ -58,7 +58,6 @@ func (cli *Cli) parseSystemCommands(input []string) bool {
 }
 
 func (cli *Cli) findCommand(input string) *command.Command {
-
 	parsed := strings.Fields(input)
 	if len(parsed) == 0 {
 		fmt.Println("No input detected")
@@ -71,19 +70,14 @@ func (cli *Cli) findCommand(input string) *command.Command {
 	currentCommands := cli.Commands
 	//Maybe recurse this one day...
 	for _, primary := range currentCommands {
-
 		if parsed[0] == primary.Name {
-
 			for _, secondary := range primary.SubCommands {
-
 				if len(parsed) > 1 {
 					if parsed[1] == secondary.Name {
-
 						return &secondary
 					}
 				}
 			}
-
 			return &primary
 		}
 	}
