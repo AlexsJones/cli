@@ -13,13 +13,15 @@ import (
 
 //Cli control object
 type Cli struct {
-	Commands []command.Command
+	Commands       []command.Command
+	Unknowncommand func(args []string)
 }
 
 //NewCli initialize
 func NewCli() *Cli {
-
-	return &Cli{}
+	c := &Cli{}
+	c.Unknowncommand = nil
+	return c
 }
 
 //AddCommand to Cli
@@ -45,26 +47,29 @@ func (cli *Cli) printHelp() {
 	table.Render() // Send output
 }
 
-func (cli *Cli) parseSystemCommands(input []string) bool {
+func (cli *Cli) parseSystemCommands(input []string) *command.Command {
 	if input[0] == "exit" {
 		fmt.Println("Bye")
 		os.Exit(0)
 	}
 	if input[0] == "help" {
-		cli.printHelp()
-		return true
+		return &command.Command{
+			Func: func(arg []string) {
+				cli.printHelp()
+			},
+		}
 	}
-	return false
+	return nil
 }
 
-func (cli *Cli) findCommand(input string) *command.Command {
+func (cli *Cli) findCommand(input string) (*command.Command, []string) {
 	parsed := strings.Fields(input)
 	if len(parsed) == 0 {
 		fmt.Println("No input detected")
-		return nil
+		return nil, parsed[1:]
 	}
-	if cli.parseSystemCommands(parsed) {
-		return nil
+	if systemCmd := cli.parseSystemCommands(parsed); systemCmd != nil {
+		return systemCmd, parsed[1:]
 	}
 
 	currentCommands := cli.Commands
@@ -74,14 +79,14 @@ func (cli *Cli) findCommand(input string) *command.Command {
 			for _, secondary := range primary.SubCommands {
 				if len(parsed) > 1 {
 					if parsed[1] == secondary.Name {
-						return &secondary
+						return &secondary, parsed[2:]
 					}
 				}
 			}
-			return &primary
+			return &primary, parsed[1:]
 		}
 	}
-	return nil
+	return nil, nil
 }
 
 //Run the primary entry point
@@ -100,11 +105,17 @@ reset:
 	fmt.Print(">>>")
 	reader := bufio.NewReader(os.Stdin)
 	text, _ := reader.ReadString('\n')
-	fmt.Println(text)
 
-	command := cli.findCommand(text)
+	command, args := cli.findCommand(text)
 	if command != nil {
-		command.Func()
+		if command.Func != nil {
+			command.Func(args)
+			fmt.Printf("\n")
+		}
+	} else {
+		if cli.Unknowncommand != nil {
+			cli.Unknowncommand(args)
+		}
 	}
 	goto reset
 }

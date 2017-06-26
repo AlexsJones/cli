@@ -4,7 +4,7 @@ package command
 type Command struct {
 	Name        string
 	Help        string
-	Func        func()
+	Func        func(args []string)
 	SubCommands []Command
 }
 
