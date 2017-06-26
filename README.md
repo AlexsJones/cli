@@ -13,7 +13,7 @@ go get github.com/AlexsJones/cli/cli
 
 # Example
 
-```
+```go
 package main
 
 import (
