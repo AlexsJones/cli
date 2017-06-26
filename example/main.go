@@ -32,6 +32,19 @@ func main() {
 					}
 					fmt.Printf("Logged in %s", args[0])
 				},
+				SubCommands: []command.Command{
+					command.Command{
+						Name: "auth",
+						Help: "login sub command",
+						Func: func(args []string) {
+							if len(args) == 0 {
+								fmt.Println("Failed login")
+								return
+							}
+							fmt.Printf("Logged in with auth! %s\n", args[0])
+						},
+					},
+				},
 			},
 			command.Command{
 				Name: "logout",

@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/AlexsJones/cli/command"
+	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -47,46 +48,50 @@ func (cli *Cli) printHelp() {
 	table.Render() // Send output
 }
 
-func (cli *Cli) parseSystemCommands(input []string) *command.Command {
+func (cli *Cli) parseSystemCommands(input []string) error {
 	if input[0] == "exit" {
 		fmt.Println("Bye")
 		os.Exit(0)
 	}
 	if input[0] == "help" {
-		return &command.Command{
-			Func: func(arg []string) {
-				cli.printHelp()
-			},
+		cli.printHelp()
+	}
+
+	return nil
+}
+
+func (cli *Cli) recurse(c []command.Command, args []string, i int) error {
+
+	for _, cmd := range c {
+		if i > len(args) {
+			return nil
+		}
+		if cmd.Name == args[i] {
+			if len(cmd.SubCommands) > 0 && len(args) > i+1 {
+				cli.recurse(cmd.SubCommands, args, i+1)
+			} else {
+				cmd.Func(args[i+1:])
+				fmt.Printf("\n")
+			}
 		}
 	}
 	return nil
 }
-
-func (cli *Cli) findCommand(input string) (*command.Command, []string) {
+func (cli *Cli) findCommand(input string) error {
 	parsed := strings.Fields(input)
 	if len(parsed) == 0 {
 		fmt.Println("No input detected")
-		return nil, parsed[1:]
+		return nil
 	}
 	if systemCmd := cli.parseSystemCommands(parsed); systemCmd != nil {
-		return systemCmd, parsed[1:]
+		return nil
 	}
-
 	currentCommands := cli.Commands
-	//Maybe recurse this one day...
-	for _, primary := range currentCommands {
-		if parsed[0] == primary.Name {
-			for _, secondary := range primary.SubCommands {
-				if len(parsed) > 1 {
-					if parsed[1] == secondary.Name {
-						return &secondary, parsed[2:]
-					}
-				}
-			}
-			return &primary, parsed[1:]
-		}
+	error := cli.recurse(currentCommands, parsed, 0)
+	if error != nil {
+		return error
 	}
-	return nil, nil
+	return nil
 }
 
 //Run the primary entry point
@@ -106,16 +111,9 @@ reset:
 	reader := bufio.NewReader(os.Stdin)
 	text, _ := reader.ReadString('\n')
 
-	command, args := cli.findCommand(text)
-	if command != nil {
-		if command.Func != nil {
-			command.Func(args)
-			fmt.Printf("\n")
-		}
-	} else {
-		if cli.Unknowncommand != nil {
-			cli.Unknowncommand(args)
-		}
+	err := cli.findCommand(text)
+	if err != nil {
+		color.Red(err.Error())
 	}
 	goto reset
 }
