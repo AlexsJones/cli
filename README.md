@@ -11,9 +11,9 @@ It looks a bit like this:
 Hit auth
 Authenticated with alex
 
->>>github logout
-Logged out
-Failed logout
+>>>github logout alex
+Logged out with alex
+
 
 >>>help
 github sub commands:
