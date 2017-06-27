@@ -20,7 +20,7 @@ func main() {
 		SubCommands: []command.Command{
 			command.Command{
 				Name: "login",
-				Help: "github login; access token to github",
+				Help: "access token to github",
 				Func: func(args []string) {
 					if len(args) == 0 {
 						fmt.Println("Failed login")
@@ -31,7 +31,7 @@ func main() {
 				SubCommands: []command.Command{
 					command.Command{
 						Name: "auth",
-						Help: "github login auth; login sub command",
+						Help: "login sub command",
 						Func: func(args []string) {
 							if len(args) == 0 {
 								fmt.Println("Failed login")
@@ -42,7 +42,7 @@ func main() {
 						SubCommands: []command.Command{
 							command.Command{
 								Name: "sub",
-								Help: "github login auth sub; login sub-sub command",
+								Help: "login sub-sub command",
 								Func: func(args []string) {
 									if len(args) == 0 {
 										fmt.Println("Failed login")
@@ -57,7 +57,7 @@ func main() {
 			},
 			command.Command{
 				Name: "logout",
-				Help: "github logout; allows you to logout from github",
+				Help: "allows you to logout from github",
 				Func: func(args []string) {
 					fmt.Println("Logged out")
 				},

@@ -28,13 +28,19 @@ func (cli *Cli) AddCommand(c command.Command) {
 	cli.Commands = append(cli.Commands, c)
 }
 
-func (cli *Cli) recurseHelp(c []command.Command, parent command.Command) {
+func (cli *Cli) recurseHelp(c []command.Command, index int, parent command.Command) {
 	for _, cmd := range c {
 		if parent.Name != "" {
-			fmt.Printf("[parent command: %s][current command: %s]: %s\n", parent.Name, cmd.Name, cmd.Help)
+			for i := 0; i < index; i++ {
+				fmt.Printf("\t")
+			}
+			fmt.Printf("[%s] %s: %s\n", parent.Name, cmd.Name, cmd.Help)
+		} else {
+			fmt.Printf("%s sub commands:\n", cmd.Name)
 		}
 		if len(cmd.SubCommands) > 0 {
-			cli.recurseHelp(cmd.SubCommands, cmd)
+			index++
+			cli.recurseHelp(cmd.SubCommands, index, cmd)
 		}
 	}
 }
@@ -50,7 +56,7 @@ func (cli *Cli) parseSystemCommands(input []string) error {
 		c.Run()
 	}
 	if input[0] == "help" {
-		cli.recurseHelp(cli.Commands, command.Command{})
+		cli.recurseHelp(cli.Commands, 0, command.Command{})
 	}
 
 	return nil
