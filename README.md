@@ -5,6 +5,21 @@
 This is a simple interactive prompt for go that actually supports sub-commands, because I couldn't find one that did...
 Supports unlimited subcommand nesting.
 
+It looks a bit like this:
+```
+>>>help  
++--------+--------+------------------------+
+| MODULE |  NAME  |          HELP          |
++--------+--------+------------------------+
+| github | login  | access token to github |
+| github | logout |                        |
++--------+--------+------------------------+
+>>>github login
+Logged in!
+
+```
+
+
 # Installation
 
 ```
@@ -13,7 +28,7 @@ go get github.com/AlexsJones/cli/cli
 
 # Example
 
-```
+```go
 package main
 
 import (

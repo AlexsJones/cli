@@ -1,3 +1,8 @@
 language: go
 
-script: go test -v test/main_test.go
+install:
+  - go get github.com/bmizerany/assert
+  - go get github.com/mrb/hob
+
+
+script: go get -u -v $(go list -f '{{join .Imports "\n"}}{{"\n"}}{{join .TestImports "\n"}}' ./... | sort | uniq | grep -v golang-samples)
