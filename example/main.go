@@ -33,7 +33,6 @@ func main() {
 						Name: "auth",
 						Help: "login sub command",
 						Func: func(args []string) {
-							fmt.Println("Hit auth")
 							if len(args) == 0 {
 								fmt.Println("Failed login")
 								return
@@ -60,7 +59,6 @@ func main() {
 				Name: "logout",
 				Help: "allows you to logout from github",
 				Func: func(args []string) {
-					fmt.Println("Logged out")
 					if len(args) == 0 {
 						fmt.Println("Failed logout")
 						return
