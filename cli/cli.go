@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"os/signal"
 	"strings"
 
 	"github.com/AlexsJones/cli/command"
 	"github.com/fatih/color"
-	"github.com/olekukonko/tablewriter"
 )
 
 //Cli control object
@@ -30,22 +30,31 @@ func (cli *Cli) AddCommand(c command.Command) {
 	cli.Commands = append(cli.Commands, c)
 }
 
-func (cli *Cli) printHelp() {
-	data := [][]string{}
+func remove(slice []command.Command, s int) []command.Command {
+	return append(slice[:s], slice[s+1:]...)
+}
 
-	for _, commands := range cli.Commands {
-		for _, subCommands := range commands.SubCommands {
-			data = append(data, []string{commands.Name, subCommands.Name, subCommands.Help})
+func RemoveDuplicates(xs *[]string) {
+	found := make(map[string]bool)
+	j := 0
+	for i, x := range *xs {
+		if !found[x] {
+			found[x] = true
+			(*xs)[j] = (*xs)[i]
+			j++
 		}
 	}
+	*xs = (*xs)[:j]
+}
 
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"Module", "Name", "Help"})
-
-	for _, v := range data {
-		table.Append(v)
+func (cli *Cli) recurseHelp(c []command.Command) error {
+	for _, cmd := range c {
+		if len(cmd.SubCommands) > 0 {
+			cli.recurseHelp(cmd.SubCommands)
+		}
+		fmt.Printf("%s: %s\n", cmd.Name, cmd.Help)
 	}
-	table.Render() // Send output
+	return nil
 }
 
 func (cli *Cli) parseSystemCommands(input []string) error {
@@ -53,8 +62,14 @@ func (cli *Cli) parseSystemCommands(input []string) error {
 		fmt.Println("Bye")
 		os.Exit(0)
 	}
+	if input[0] == "clear" {
+		c := exec.Command("clear")
+		c.Stdout = os.Stdout
+		c.Run()
+	}
 	if input[0] == "help" {
-		cli.printHelp()
+
+		cli.recurseHelp(cli.Commands)
 	}
 
 	return nil

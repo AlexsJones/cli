@@ -11,10 +11,6 @@ func main() {
 
 	c := cli.NewCli()
 
-	c.Unknowncommand = func(args []string) {
-		fmt.Println("Unknown command")
-	}
-
 	c.AddCommand(command.Command{
 		Name: "github",
 		Help: "github primary command interface",
@@ -24,7 +20,7 @@ func main() {
 		SubCommands: []command.Command{
 			command.Command{
 				Name: "login",
-				Help: "access token to github",
+				Help: "github login; access token to github",
 				Func: func(args []string) {
 					if len(args) == 0 {
 						fmt.Println("Failed login")
@@ -35,7 +31,7 @@ func main() {
 				SubCommands: []command.Command{
 					command.Command{
 						Name: "auth",
-						Help: "login sub command",
+						Help: "github login auth; login sub command",
 						Func: func(args []string) {
 							if len(args) == 0 {
 								fmt.Println("Failed login")
@@ -48,7 +44,7 @@ func main() {
 			},
 			command.Command{
 				Name: "logout",
-				Help: "",
+				Help: "github logout; allows you to logout from github",
 				Func: func(args []string) {
 					fmt.Println("Logged out")
 				},

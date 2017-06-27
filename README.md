@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/AlexsJones/cli.svg?branch=master)](https://travis-ci.org/AlexsJones/cli)
 
 This is a simple interactive prompt for go that actually supports sub-commands, because I couldn't find one that did...
-Supports unlimited subcommand nesting and passes through arguments.
+Supports unlimited subcommand nesting.
 
 # Installation
 
@@ -82,13 +82,12 @@ func main() {
 
 Gives you information such as:
 
-```
+*Needs to be improved and recurse in a better way*
 
-+--------+--------+------------------------+
-| MODULE |  NAME  |          HELP          |
-+--------+--------+------------------------+
-| github | login  | access token to github |
-| github | logout |                        |
-+--------+--------+------------------------+
+```
+auth: github login auth; login sub command
+login: github login; access token to github
+logout: github logout; allows you to logout from github
+github: github primary command interface
 
 ```
