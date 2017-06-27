@@ -33,11 +33,12 @@ func main() {
 						Name: "auth",
 						Help: "login sub command",
 						Func: func(args []string) {
+							fmt.Println("Hit auth")
 							if len(args) == 0 {
 								fmt.Println("Failed login")
 								return
 							}
-							fmt.Printf("Logged in with auth! %s\n", args[0])
+							fmt.Printf("Authenticated with %s\n", args[0])
 						},
 						SubCommands: []command.Command{
 							command.Command{
@@ -48,7 +49,7 @@ func main() {
 										fmt.Println("Failed login")
 										return
 									}
-									fmt.Printf("Logged in with auth! %s\n", args[0])
+									fmt.Printf("Logged in with username %s\n", args[0])
 								},
 							},
 						},
@@ -60,6 +61,11 @@ func main() {
 				Help: "allows you to logout from github",
 				Func: func(args []string) {
 					fmt.Println("Logged out")
+					if len(args) == 0 {
+						fmt.Println("Failed logout")
+						return
+					}
+					fmt.Printf("Logged out with username %s\n", args[0])
 				},
 			},
 		},
