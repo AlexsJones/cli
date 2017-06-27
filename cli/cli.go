@@ -14,14 +14,12 @@ import (
 
 //Cli control object
 type Cli struct {
-	Commands       []command.Command
-	Unknowncommand func(args []string)
+	Commands []command.Command
 }
 
 //NewCli initialize
 func NewCli() *Cli {
 	c := &Cli{}
-	c.Unknowncommand = nil
 	return c
 }
 
@@ -30,31 +28,15 @@ func (cli *Cli) AddCommand(c command.Command) {
 	cli.Commands = append(cli.Commands, c)
 }
 
-func remove(slice []command.Command, s int) []command.Command {
-	return append(slice[:s], slice[s+1:]...)
-}
-
-func RemoveDuplicates(xs *[]string) {
-	found := make(map[string]bool)
-	j := 0
-	for i, x := range *xs {
-		if !found[x] {
-			found[x] = true
-			(*xs)[j] = (*xs)[i]
-			j++
-		}
-	}
-	*xs = (*xs)[:j]
-}
-
-func (cli *Cli) recurseHelp(c []command.Command) error {
+func (cli *Cli) recurseHelp(c []command.Command, parent command.Command) {
 	for _, cmd := range c {
-		if len(cmd.SubCommands) > 0 {
-			cli.recurseHelp(cmd.SubCommands)
+		if parent.Name != "" {
+			fmt.Printf("[parent command: %s][current command: %s]: %s\n", parent.Name, cmd.Name, cmd.Help)
 		}
-		fmt.Printf("%s: %s\n", cmd.Name, cmd.Help)
+		if len(cmd.SubCommands) > 0 {
+			cli.recurseHelp(cmd.SubCommands, cmd)
+		}
 	}
-	return nil
 }
 
 func (cli *Cli) parseSystemCommands(input []string) error {
@@ -68,8 +50,7 @@ func (cli *Cli) parseSystemCommands(input []string) error {
 		c.Run()
 	}
 	if input[0] == "help" {
-
-		cli.recurseHelp(cli.Commands)
+		cli.recurseHelp(cli.Commands, command.Command{})
 	}
 
 	return nil

@@ -39,6 +39,19 @@ func main() {
 							}
 							fmt.Printf("Logged in with auth! %s\n", args[0])
 						},
+						SubCommands: []command.Command{
+							command.Command{
+								Name: "sub",
+								Help: "github login auth sub; login sub-sub command",
+								Func: func(args []string) {
+									if len(args) == 0 {
+										fmt.Println("Failed login")
+										return
+									}
+									fmt.Printf("Logged in with auth! %s\n", args[0])
+								},
+							},
+						},
 					},
 				},
 			},
@@ -51,6 +64,11 @@ func main() {
 			},
 		},
 	})
-
+	c.AddCommand(command.Command{
+		Name: "sql",
+		Help: "sql primary command interface",
+		Func: func(args []string) {
+			fmt.Println("I do nothing...")
+		}})
 	c.Run()
 }
