@@ -38,7 +38,7 @@ submodule sub commands:
 ```
 go get github.com/AlexsJones/cli/cli
 ```
-# Simple examples
+# Simple example
 
 ```go
 package main
@@ -65,6 +65,15 @@ func main() {
 
 }
 ```
+
+This gives you something like:
+
+```
+>>>github
+I do nothing...
+
+```
+
 
 # Recursive subcommand example
 
