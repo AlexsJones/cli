@@ -38,8 +38,35 @@ submodule sub commands:
 ```
 go get github.com/AlexsJones/cli/cli
 ```
+# Simple examples
 
-# Example
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/AlexsJones/cli/cli"
+	"github.com/AlexsJones/cli/command"
+)
+
+func main() {
+	c := cli.NewCli()
+
+	c.AddCommand(command.Command{
+		Name: "github",
+		Help: "github primary command interface",
+		Func: func(args []string) {
+			fmt.Println("I do nothing...")
+		},
+	}
+
+	c.Run()
+
+}
+```
+
+# Recursive subcommand example
 
 ```go
 package main
