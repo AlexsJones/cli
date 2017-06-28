@@ -13,14 +13,23 @@ Authenticated with alex
 
 >>>github logout
 Logged out
-Failed logout
 
 >>>help
+npm sub commands:
+	[npm] file: relink an npm package locally<prefix> <string>
+	[npm] remove: remove a dep from package.json <string>
+	[npm] usage: find usage of a package within submodules <string>
 github sub commands:
-	[github] login: access token to github
-		[login] auth: login sub command
-			[auth] sub: login sub-sub command
-	[github] logout: allows you to logout from github
+	[github] pr: pr command palette
+		[pr] attach: attach the current issue to a pr <reponame> <owner> <prnumber>
+	[github] issue: Issue command palette
+		[issue] set: set the current working issue <issue url>
+		[issue] unset: unset the current working issue
+		[issue] show: show the current working issue
+	[github] login: use an access token to login to github
+submodule sub commands:
+	[submodule] exec: execute in all submodules <command string>
+
 ```
 
 
@@ -119,12 +128,22 @@ func main() {
 
 Gives you information such as:
 
-*Needs to be improved and recurse in a better way*
-
 ```
-auth: github login auth; login sub command
-login: github login; access token to github
-logout: github logout; allows you to logout from github
-github: github primary command interface
+>>>help
+npm sub commands:
+	[npm] file: relink an npm package locally<prefix> <string>
+	[npm] remove: remove a dep from package.json <string>
+	[npm] usage: find usage of a package within submodules <string>
+github sub commands:
+	[github] pr: pr command palette
+		[pr] attach: attach the current issue to a pr <reponame> <owner> <prnumber>
+	[github] issue: Issue command palette
+		[issue] set: set the current working issue <issue url>
+		[issue] unset: unset the current working issue
+		[issue] show: show the current working issue
+	[github] login: use an access token to login to github
+submodule sub commands:
+	[submodule] exec: execute in all submodules <command string>
+
 
 ```
