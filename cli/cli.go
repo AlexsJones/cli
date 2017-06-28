@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,29 +8,75 @@ import (
 	"strings"
 
 	"github.com/AlexsJones/cli/command"
+	"github.com/chzyer/readline"
 	"github.com/fatih/color"
 )
 
 //Cli control object
 type Cli struct {
-	Commands []command.Command
+	Commands       []command.Command
+	ReadlineConfig *readline.Config
+	Scanner        *readline.Instance
 }
+
+func filterInput(r rune) (rune, bool) {
+	switch r {
+	// block CtrlZ feature
+	case readline.CharCtrlZ:
+		return r, false
+	}
+	return r, true
+}
+
+var completer = readline.NewPrefixCompleter()
 
 //NewCli initialize
 func NewCli() *Cli {
 	c := &Cli{}
+
+	l, err := readline.NewEx(&readline.Config{
+		Prompt:              ">>> ",
+		HistoryFile:         "/tmp/readline.tmp",
+		AutoComplete:        completer,
+		InterruptPrompt:     "^C",
+		EOFPrompt:           "exit",
+		HistorySearchFold:   true,
+		FuncFilterInputRune: filterInput,
+	})
+	if err != nil {
+		panic(err)
+	}
+	c.Scanner = l
+
 	return c
 }
 
 //AddCommand to Cli
 func (cli *Cli) AddCommand(c command.Command) {
 	cli.Commands = append(cli.Commands, c)
+
+	//recusively add command names to completer
+	pc := readline.PcItem(c.Name)
+	cli.recurseCompletion(c.SubCommands, pc, 0)
+	completer.Children = append(completer.Children, pc)
 }
 
 func (cli *Cli) peakChildren(c []command.Command, name string) *command.Command {
 	for _, cmd := range c {
 		if cmd.Name == name {
 			return &cmd
+		}
+	}
+	return nil
+}
+
+func (cli *Cli) recurseCompletion(c []command.Command, pc *readline.PrefixCompleter, i int) error {
+	for _, cmd := range c {
+		p := readline.PcItem(cmd.Name)
+		pc.Children = append(pc.Children, p)
+
+		if len(cmd.SubCommands) > 0 {
+			cli.recurseCompletion(cmd.SubCommands, p, i+1)
 		}
 	}
 	return nil
@@ -61,7 +106,7 @@ func (cli *Cli) parseSystemCommands(input []string) error {
 	if input[0] == "clear" {
 		c := exec.Command("clear")
 		c.Stdout = os.Stdout
-		c.Run()
+
 	}
 	if input[0] == "help" {
 		cli.recurseHelp(cli.Commands, 0, command.Command{})
@@ -109,6 +154,13 @@ func (cli *Cli) findCommand(input string) error {
 	return nil
 }
 
+func (cli *Cli) readline() string {
+
+	text, _ := cli.Scanner.Readline()
+	cli.Scanner.SaveHistory(text)
+	return text
+}
+
 //Run the primary entry point
 func (cli *Cli) Run() {
 
@@ -131,8 +183,8 @@ func (cli *Cli) Run() {
 reset:
 	//Get user input
 	fmt.Print(">>>")
-	reader := bufio.NewReader(os.Stdin)
-	text, _ := reader.ReadString('\n')
+
+	text := cli.readline()
 
 	err := cli.findCommand(text)
 	if err != nil {
