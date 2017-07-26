@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/AlexsJones/cli.svg?branch=master)](https://travis-ci.org/AlexsJones/cli)
 
+[![GoDoc](https://godoc.org/github.com/AlexsJones/cli/cli?status.svg)](https://godoc.org/github.com/AlexsJones/cli/cli)
+
 This is a simple interactive prompt for go that actually supports sub-commands, because I couldn't find one that did...
 Supports unlimited subcommand nesting.
 
