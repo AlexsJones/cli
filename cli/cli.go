@@ -1,3 +1,5 @@
+//Package cli is a simple package to help implement interactive command line interfaces in golang.
+//One of the main reasons behind generate it is that there is a lack of subcommand support in other packages.
 package cli
 
 import (
@@ -12,7 +14,7 @@ import (
 	"github.com/fatih/color"
 )
 
-//Cli control object
+//Cli structure contains configuration and commands
 type Cli struct {
 	Commands       []command.Command
 	ReadlineConfig *readline.Config
@@ -30,7 +32,8 @@ func filterInput(r rune) (rune, bool) {
 
 var completer = readline.NewPrefixCompleter()
 
-//NewCli initialize
+//NewCli creates a new instance of Cli
+//It returns a pointer to the Cli object
 func NewCli() *Cli {
 	c := &Cli{}
 
@@ -51,7 +54,8 @@ func NewCli() *Cli {
 	return c
 }
 
-//AddCommand to Cli
+//AddCommand is a method on Cli takes Command as input
+//This appends to the current command list to search through for input
 func (cli *Cli) AddCommand(c command.Command) {
 	cli.Commands = append(cli.Commands, c)
 
@@ -161,7 +165,7 @@ func (cli *Cli) readline() string {
 	return text
 }
 
-//Run the primary entry point
+//Run is the primary entrypoint to start blocking and reading user input
 func (cli *Cli) Run() {
 
 	c := make(chan os.Signal, 1)
