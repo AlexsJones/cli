@@ -7,7 +7,7 @@
 This is a simple interactive prompt for go that actually supports sub-commands, because I couldn't find one that did...
 Supports unlimited subcommand nesting.
 
-It looks a bit like this:
+It looks a bit like this (Once you wire up your commands: see example):
 ```
 >>>github login auth alex
 Hit auth

@@ -5,7 +5,6 @@ package cli
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"os/signal"
 	"strings"
 
@@ -108,9 +107,7 @@ func (cli *Cli) parseSystemCommands(input []string) error {
 		os.Exit(0)
 	}
 	if input[0] == "clear" {
-		c := exec.Command("clear")
-		c.Stdout = os.Stdout
-
+		print("\033[H\033[2J")
 	}
 	if input[0] == "help" {
 		cli.recurseHelp(cli.Commands, 0, command.Command{})
