@@ -138,6 +138,7 @@ func (cli *Cli) recurse(c []command.Command, args []string, i int) error {
 	}
 	return nil
 }
+
 func (cli *Cli) findCommand(input string) error {
 	parsed := strings.Fields(input)
 	if len(parsed) == 0 {
