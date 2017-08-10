@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
-    "sync"
+	"sync"
 
 	"github.com/AlexsJones/cli/command"
 	"github.com/chzyer/readline"
@@ -27,10 +27,10 @@ var once sync.Once
 // This will create a Singleton of the Cli structure
 // and return only that instance (while insuring being threadsafe)  
 func GetInstance() *Cli {
-    once.Do(func(){
-        instance = NewCli()
-    })
-    return instance
+	once.Do(func(){
+		instance = NewCli()
+	})
+	return instance
 }
 
 func filterInput(r rune) (rune, bool) {
