@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"strings"
+    "sync"
 
 	"github.com/AlexsJones/cli/command"
 	"github.com/chzyer/readline"
@@ -18,6 +19,18 @@ type Cli struct {
 	Commands       []command.Command
 	ReadlineConfig *readline.Config
 	Scanner        *readline.Instance
+}
+
+var instance *Cli
+var once sync.Once
+
+// This will create a Singleton of the Cli structure
+// and return only that instance (while insuring being threadsafe)  
+func GetInstance() *Cli {
+    once.Do(func(){
+        instance = NewCli()
+    })
+    return instance
 }
 
 func filterInput(r rune) (rune, bool) {
@@ -102,14 +115,14 @@ func (cli *Cli) recurseHelp(c []command.Command, index int, parent command.Comma
 }
 
 func (cli *Cli) parseSystemCommands(input []string) error {
-	if input[0] == "exit" {
+	if strings.ToLower(input[0]) == "exit" || strings.ToLower(input[0]) == "quit" {
 		fmt.Println("Bye")
 		os.Exit(0)
 	}
-	if input[0] == "clear" {
+	if strings.ToLower(input[0]) == "clear" {
 		print("\033[H\033[2J")
 	}
-	if input[0] == "help" {
+	if strings.ToLower(input[0]) == "help" {
 		cli.recurseHelp(cli.Commands, 0, command.Command{})
 	}
 
@@ -182,15 +195,15 @@ func (cli *Cli) Run() {
 		}
 		os.Exit(0)
 	}
-reset:
-	//Get user input
-	fmt.Print(">>>")
+    for {
+    	//Get user input
+    	fmt.Print(">>>")
 
-	text := cli.readline()
+    	text := cli.readline()
 
-	err := cli.findCommand(text)
-	if err != nil {
-		color.Red(err.Error())
-	}
-	goto reset
+    	err := cli.findCommand(text)
+    	if err != nil {
+    		color.Red(err.Error())
+    	}
+    }
 }
