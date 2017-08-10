@@ -25,7 +25,7 @@ var instance *Cli
 var once sync.Once
 
 // This will create a Singleton of the Cli structure
-// and return only that instance (while insuring being threadsafe)  
+// and return only that instance (while ensuring it is threadsafe)  
 func GetInstance() *Cli {
 	once.Do(func(){
 		instance = NewCli()
