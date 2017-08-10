@@ -195,15 +195,15 @@ func (cli *Cli) Run() {
 		}
 		os.Exit(0)
 	}
-    for {
-    	//Get user input
-    	fmt.Print(">>>")
+	for {
+		//Get user input
+		fmt.Print(">>>")
 
-    	text := cli.readline()
+		text := cli.readline()
 
-    	err := cli.findCommand(text)
-    	if err != nil {
-    		color.Red(err.Error())
-    	}
-    }
+		err := cli.findCommand(text)
+		if err != nil {
+			color.Red(err.Error())
+		}
+	}
 }
