@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"strings"
-	"sync"
 
 	"github.com/AlexsJones/cli/command"
 	"github.com/chzyer/readline"
