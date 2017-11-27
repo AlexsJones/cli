@@ -16,3 +16,8 @@ func NewCommand() *Command {
 	c.SubCommands = []Command{}
 	return c
 }
+
+//Count the number of subcommands
+func (c *Command) Count() int {
+	return len(c.SubCommands)
+}
