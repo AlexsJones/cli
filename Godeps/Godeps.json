@@ -4,13 +4,28 @@
 	"GodepVersion": "v79",
 	"Deps": [
 		{
-			"ImportPath": "github.com/mattn/go-runewidth",
-			"Comment": "v0.0.2-3-g97311d9",
-			"Rev": "97311d9f7767e3d6f422ea06661bc2c7a19e8a5d"
+			"ImportPath": "github.com/chzyer/readline",
+			"Comment": "v1.4-24-g41eea22",
+			"Rev": "41eea22f717c616615e1e59aa06cf831f9901f35"
 		},
 		{
-			"ImportPath": "github.com/olekukonko/tablewriter",
-			"Rev": "febf2d34b54a69ce7530036c7503b1c9fbfdf0bb"
+			"ImportPath": "github.com/fatih/color",
+			"Comment": "v1.5.0-2-g62e9147",
+			"Rev": "62e9147c64a1ed519147b62a56a14e83e2be02c1"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-colorable",
+			"Comment": "v0.0.8",
+			"Rev": "941b50ebc6efddf4c41c8e4537a5f68a4e686b24"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-isatty",
+			"Comment": "v0.0.2",
+			"Rev": "fc9e8d8ef48496124e79ae0df75490096eccf6fe"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "c23410a886927bab8ca5e80b08af6a56faeb330d"
 		}
 	]
 }
