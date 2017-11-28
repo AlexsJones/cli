@@ -37,13 +37,14 @@ func NewCli() *Cli {
 	c := &Cli{}
 
 	l, err := readline.NewEx(&readline.Config{
-		Prompt:              ">>> ",
-		HistoryFile:         "/tmp/readline.tmp",
-		AutoComplete:        completer,
-		InterruptPrompt:     "^C",
-		EOFPrompt:           "exit",
-		HistorySearchFold:   true,
-		FuncFilterInputRune: filterInput,
+		Prompt:          ">>> ",
+		HistoryFile:     "/tmp/readline.tmp",
+		AutoComplete:    completer,
+		InterruptPrompt: "^C",
+		EOFPrompt:       "exit",
+		//TODO some weird version error broke this
+		// HistorySearchFold:   true,
+		// FuncFilterInputRune: filterInput,
 	})
 	if err != nil {
 		panic(err)
