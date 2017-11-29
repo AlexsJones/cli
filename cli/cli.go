@@ -43,8 +43,8 @@ func NewCli() *Cli {
 		InterruptPrompt: "^C",
 		EOFPrompt:       "exit",
 		//TODO some weird version error broke this
-		// HistorySearchFold:   true,
-		// FuncFilterInputRune: filterInput,
+		HistorySearchFold:   true,
+		FuncFilterInputRune: filterInput,
 	})
 	if err != nil {
 		panic(err)
