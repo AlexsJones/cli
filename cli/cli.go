@@ -86,18 +86,20 @@ func (cli *Cli) recurseCompletion(c []command.Command, pc *readline.PrefixComple
 	return nil
 }
 
-func (cli *Cli) recurseHelp(c []command.Command, index int, parent command.Command) {
+func (cli *Cli) recurseHelp(c []command.Command, rootCommands []string, offset int) {
+
 	for _, cmd := range c {
-		if parent.Name != "" {
-			for i := 0; i < index; i++ {
-				fmt.Printf("\t")
-			}
-			fmt.Printf("[%s] %s: %s\n", parent.Name, cmd.Name, cmd.Help)
-		} else {
-			fmt.Printf("%s sub commands:\n", cmd.Name)
+		for i := 0; i < offset; i++ {
+			fmt.Printf("\t")
 		}
+		for _, n := range rootCommands {
+			if strings.Compare(n, cmd.Name) == 0 {
+				offset = 0
+			}
+		}
+		fmt.Printf("[%s]: %s\n", cmd.Name, cmd.Help)
 		if len(cmd.SubCommands) > 0 {
-			cli.recurseHelp(cmd.SubCommands, index+1, cmd)
+			cli.recurseHelp(cmd.SubCommands, rootCommands, offset+1)
 		}
 	}
 }
@@ -111,7 +113,12 @@ func (cli *Cli) parseSystemCommands(input []string) error {
 		print("\033[H\033[2J")
 	}
 	if input[0] == "help" {
-		cli.recurseHelp(cli.Commands, 0, command.Command{})
+
+		var rootCommands []string
+		for _, r := range cli.Commands {
+			rootCommands = append(rootCommands, r.Name)
+		}
+		cli.recurseHelp(cli.Commands, rootCommands, 0)
 	}
 
 	return nil
