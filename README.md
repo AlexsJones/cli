@@ -4,6 +4,8 @@
 
 [![GoDoc](https://godoc.org/github.com/AlexsJones/cli/cli?status.svg)](https://godoc.org/github.com/AlexsJones/cli/cli)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/3a06871c361d5e8e70ae/maintainability)](https://codeclimate.com/github/AlexsJones/cli/maintainability)
+
 This is a simple interactive prompt for go that actually supports sub-commands, because I couldn't find one that did...
 Supports unlimited subcommand nesting.
 
