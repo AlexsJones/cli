@@ -7,10 +7,7 @@ import (
 	"github.com/AlexsJones/cli/command"
 )
 
-func main() {
-
-	c := cli.NewCli()
-
+func AddCommands(c *cli.Cli) {
 	c.AddCommand(command.Command{
 		Name: "github",
 		Help: "github primary command interface",
@@ -79,5 +76,10 @@ func main() {
 				},
 			},
 		}})
+}
+func main() {
+
+	c := cli.NewCli()
+	AddCommands(c)
 	c.Run()
 }

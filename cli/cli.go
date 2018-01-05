@@ -174,6 +174,14 @@ func (cli *Cli) readline() string {
 //Run is the primary entrypoint to start blocking and reading user input
 func (cli *Cli) Run() {
 
+	if len(os.Args) > 1 && os.Args[1] == "unattended" {
+		err := cli.findCommand(strings.Join(os.Args[2:], " "))
+		if err != nil {
+			color.Red(err.Error())
+		}
+		os.Exit(0)
+	}
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
@@ -183,22 +191,15 @@ func (cli *Cli) Run() {
 		}
 	}()
 
-	if len(os.Args) > 1 && os.Args[1] == "unattended" {
-		err := cli.findCommand(strings.Join(os.Args[2:], " "))
+	for {
+		//Get user input
+		fmt.Print(">>>")
+
+		text := cli.readline()
+
+		err := cli.findCommand(text)
 		if err != nil {
 			color.Red(err.Error())
 		}
-		os.Exit(0)
 	}
-reset:
-	//Get user input
-	fmt.Print(">>>")
-
-	text := cli.readline()
-
-	err := cli.findCommand(text)
-	if err != nil {
-		color.Red(err.Error())
-	}
-	goto reset
 }
