@@ -63,7 +63,7 @@ func main() {
 		Func: func(args []string) {
 			fmt.Println("I do nothing...")
 		},
-	}
+	})
 
 	c.Run()
 
